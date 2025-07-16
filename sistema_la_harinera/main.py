@@ -24,7 +24,6 @@ def menu_principal():
         print("=== SISTEMA LA HARINERA ===")
         print("1. ABM de Clientes")
         print("2. Caja")
-        print("9. Obtener estructura SQL")
         print("0. Salir del sistema")
 
         opcion = input("Selecciona una opción (0-1): ").strip()
@@ -34,8 +33,6 @@ def menu_principal():
             menu_abm_clientes()
         elif opcion == "2":
             menu_caja()
-        elif opcion == "9":
-            obtener_estructura()
         elif opcion == "0":
             print("👋Saliendo del sistema.")
             break
