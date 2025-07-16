@@ -1,0 +1,1 @@
+# Funciones comunes y utilitarias
