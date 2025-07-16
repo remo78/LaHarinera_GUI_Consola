@@ -252,8 +252,10 @@ def registrar_egreso_manual():
             cursor = conn.cursor()
             fecha_sql = datetime.strptime(egreso.fecha, "%d/%m/%Y").strftime("%Y-%m-%d")
 
+            # Usar OUTPUT INSERTED.ID_Caja para obtener el ID recién insertado
             cursor.execute("""
                 INSERT INTO CajaDiaria (Fecha, ID_MedioPago, Tipo, Concepto, ID_CuentaContable, Monto, Observacion)
+                OUTPUT INSERTED.ID_Caja
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (
                 fecha_sql,
@@ -265,16 +267,20 @@ def registrar_egreso_manual():
                 egreso.observacion
             ))
 
-            # Obtener el ID del movimiento recién insertado
-            cursor.execute("SELECT SCOPE_IDENTITY()")
-            id_movimiento = int(cursor.fetchone()[0])
+            resultado = cursor.fetchone()
+            if resultado is None:
+                print("❌ No se pudo obtener el ID del movimiento recién insertado.")
+                conn.rollback()
+                return
+
+            id_movimiento = resultado[0]
+
+            # Registrar asiento contable ANTES del commit
+            registrar_asiento_por_movimiento(egreso, id_movimiento)
 
             conn.commit()
             print("✅ Egreso registrado correctamente.")
 
-            # 📘 Registrar asiento contable
-            registrar_asiento_por_movimiento(egreso, id_movimiento)
-            
     except Exception as e:
         print(f"❌ Error al registrar egreso: {e}")
 
