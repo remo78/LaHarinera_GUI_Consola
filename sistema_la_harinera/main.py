@@ -8,15 +8,14 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from helpers.clientes import menu_abm_clientes
 from helpers.caja import menu_caja
+from helpers.asientos_contables import menu_asientos
 
 def limpiar_pantalla():
-  """Limpia la pantalla de la consola."""
-  if os.name == 'nt':
-    # Windows
-    os.system('cls')
-  else:
-    # Linux, macOS, etc.
-    os.system('clear')
+    """Limpia la pantalla de la consola."""
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
 
 def menu_principal():
     while True:
@@ -24,15 +23,18 @@ def menu_principal():
         print("=== SISTEMA LA HARINERA ===")
         print("1. ABM de Clientes")
         print("2. Caja")
+        print("3. Asientos Contables")
         print("0. Salir del sistema")
 
-        opcion = input("Selecciona una opción (0-1): ").strip()
+        opcion = input("Selecciona una opción (0-3): ").strip()
         limpiar_pantalla()
         
         if opcion == "1":
             menu_abm_clientes()
         elif opcion == "2":
             menu_caja()
+        elif opcion == "3":
+            menu_asientos()
         elif opcion == "0":
             print("👋Saliendo del sistema.")
             break
